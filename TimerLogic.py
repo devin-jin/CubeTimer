@@ -1,6 +1,7 @@
 import time
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QListWidgetItem
+import best
 
 # 定时器逻辑类，负责定时器的启动、停止、重置以及时间的更新和历史记录的管理
 class TimerLogic:
@@ -39,6 +40,7 @@ class TimerLogic:
         elapsed_time = time.time() - self.start_time
         self.history.append(elapsed_time)
         self.update_history_list()
+        self.update_best()
         self.ui.start_button.setText('开始')
         self.timer_running = False
 
@@ -64,3 +66,12 @@ class TimerLogic:
         for idx, time_val in enumerate(self.history):
             item = QListWidgetItem(f'#{idx + 1}: {time_val:.2f} 秒')
             self.ui.history_list.addItem(item)
+    
+    def update_best(self):
+        bestTime = best.get_best_times(self.history)
+        ao5 = best.get_ao5(self.history)
+        self.ui.score_label.setText(f'{bestTime:.2f} 秒 {ao5:.2f} 秒')
+
+    def prt(self):
+        print(self.history)
+        print(1)
