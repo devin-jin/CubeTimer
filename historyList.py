@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 class historyList:
     def __init__(self):
@@ -9,12 +8,14 @@ class historyList:
     def append(self,time):
         self.list.append(time)
     def clr(self):
-        self.list=[]    
+        self.list=[]
+        self.df_h = pd.DataFrame( columns=['time', 'ao5', 'ao12'])
+
     def len(self): return len(self.list)
 
-    def best_times(self):
-        ls = sorted(self.list)
-        return ls[0]
+    def best(self,num):
+        lsBest= self.df_h.min().values
+        return lsBest[num]
     def recentList(self,num):
         return self.list[-num:]
     def recentListSorted(self,num):
@@ -28,7 +29,7 @@ class historyList:
             return sum(ls[1:-1])/(num-2)
         
     def updateDf(self):
-        newRow=pd.Series([self.best_times(),self.ao(5),self.ao(12)],index=self.df_h.columns) 
+        newRow=pd.Series([self.list[-1],self.ao(5),self.ao(12)],index=self.df_h.columns) 
         self.df_h=self.df_h.append(newRow,ignore_index=True)
 
 

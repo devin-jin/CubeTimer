@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QListWidgetItem
 from historyList import historyList
 from dfQt import PandasModel
 
-
 # 定时器逻辑类，负责定时器的启动、停止、重置以及时间的更新和历史记录的管理
 class TimerLogic:
     def __init__(self):
@@ -19,6 +18,8 @@ class TimerLogic:
         self.history = historyList()
 
     # 设置用户界面对象
+    def num2str(self,num):
+        return f"{num:.2f}"
     def set_ui(self, ui):
         self.ui = ui
 
@@ -40,17 +41,15 @@ class TimerLogic:
     def stop_timer(self):
         self.timer.stop()
         elapsed_time = time.time() - self.start_time
-        self.history.append(elapsed_time)
-        self.update_history_list()
-        self.update_best()
+        self.update_history(elapsed_time)
         self.ui.start_button.setText('开始')
         self.timer_running = False
 
     # 重置定时器，清除当前时间，显示为0，并重置定时器状态和历史记录
     def reset_timer(self):
         self.timer.stop()
-        self.start_time = None
-        self.ui.time_label.setText('0.00')
+        self.start_time = 0
+        self.ui.time_label.setText(self.num2str(self.start_time))
         self.ui.start_button.setText('开始')
         self.timer_running = False
         self.history.clr()
@@ -59,24 +58,18 @@ class TimerLogic:
     def update_time(self):
         if self.start_time is not None:
             elapsed_time = time.time() - self.start_time
-            self.ui.time_label.setText(f'{elapsed_time:.2f}')
-
+            self.ui.time_label.setText(self.num2str(elapsed_time))
+    def update_best(self):
+        strBest="best:"+self.num2str(self.history.best(0))+"\nao5:"+self.num2str(self.history.best(1))+"\nao12:"+self.num2str(self.history.best(2))
+        self.ui.best_label.setText(strBest)
     # 更新历史记录列表，清空当前列表并添加新的历史记录
-    def update_history_list(self):
-        self.ui.history_list.clear()
-        for idx, time_val in enumerate(self.history.list):
-            item = QListWidgetItem(f'#{idx + 1}: {time_val:.2f} 秒')
-            self.ui.history_list.addItem(item)
+    def update_history(self,time):
+        self.history.append(time)
         self.history.updateDf()
         self.model=PandasModel(self.history.df_h)
         self.ui.table.setModel(self.model)
+        self.update_best()
     
-    def update_best(self):
-        bestTime = self.history.best_times()
-        ao5 = self.history.ao(5)
-        ao12 = self.history.ao(12)
-        self.ui.score_label.setText(f'best: {bestTime:.2f} 秒\
-  ao5:{ao5:.2f} 秒  ao12:{ao12:.2f} 秒')
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
             self.logic.toggle_timer()

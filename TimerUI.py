@@ -11,7 +11,7 @@ class TimerUI(QWidget):
 
     def initUI(self):
         self.setWindowTitle('计时器')
-        self.setGeometry(200, 100, 1000,1000)
+        self.setGeometry(200, 100, 800, 800)
 
         main_layout = QHBoxLayout()
         main_layout.setSpacing(10)  # 设置垂直间隔
@@ -41,23 +41,21 @@ class TimerUI(QWidget):
 
         show_layout.addLayout(button_layout)
 
-        self.score_label = QLabel('best: NaN    ao5: NaN    ao12: NaN', self)
-        self.score_label.setAlignment(Qt.AlignCenter)
-        self.score_label.setStyleSheet("font-size: 20px;")
-        show_layout.addWidget(self.score_label, alignment=Qt.AlignCenter)
+        self.best_label = QLabel('', self)
+        self.best_label.setAlignment(Qt.AlignCenter)
+        self.best_label.setStyleSheet("font-size: 20px;")
+        show_layout.addWidget(self.best_label, alignment=Qt.AlignCenter)
 
-        self.table = QTableView()
-        self.table.setStyleSheet("font-size: 20px;")
-        show_layout.addWidget(self.table, alignment=Qt.AlignCenter)
 
         main_layout.addLayout(show_layout)
         
 
 
         # 历史记录部分
-        self.history_list = QListWidget(self)
-        main_layout.addWidget(self.history_list)
-        self.history_list.setStyleSheet("font-size: 30px;")
+
+        self.table = QTableView()
+        main_layout.addWidget(self.table)
+
         self.setLayout(main_layout)
 
 

@@ -22,7 +22,7 @@ class PandasModel(QAbstractTableModel):
             if orientation == Qt.Horizontal:
                 return str(self._data.columns[section])
             elif orientation == Qt.Vertical:
-                return str(self._data.index[section])
+                return str(self._data.index[section]+1)
         return None
 
 
