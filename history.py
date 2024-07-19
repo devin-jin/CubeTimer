@@ -1,6 +1,6 @@
 import pandas as pd
 
-class historyList:
+class history:
     def __init__(self):
         self.list = []
         self.df_h = pd.DataFrame( columns=['time', 'ao5', 'ao12'])
