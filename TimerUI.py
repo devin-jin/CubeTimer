@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import  QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QListWidget,QTableView
 from PyQt5.QtCore import Qt
+from gragh import MplCanvas
 
 
 class TimerUI(QWidget):
@@ -11,7 +12,7 @@ class TimerUI(QWidget):
 
     def initUI(self):
         self.setWindowTitle('计时器')
-        self.setGeometry(200, 100, 800, 800)
+        self.setGeometry(200, 100, 1300, 800)
 
         main_layout = QHBoxLayout()
         main_layout.setSpacing(10)  # 设置垂直间隔
@@ -45,6 +46,13 @@ class TimerUI(QWidget):
         self.best_label.setAlignment(Qt.AlignCenter)
         self.best_label.setStyleSheet("font-size: 20px;")
         show_layout.addWidget(self.best_label, alignment=Qt.AlignCenter)
+
+        self.graph_canvas = MplCanvas(width=5, height=4, dpi=100)
+        self.graph_canvas.axes.set_title('history')
+        self.graph_canvas.axes.set_xlabel('attempt')
+        self.graph_canvas.axes.set_ylabel('time')
+
+        main_layout.addWidget(self.graph_canvas)
 
 
         main_layout.addLayout(show_layout)

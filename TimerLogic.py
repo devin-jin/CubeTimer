@@ -1,7 +1,7 @@
 import time
 from PyQt5.QtCore import QTimer,Qt
 from PyQt5.QtWidgets import QListWidgetItem
-from historyList import historyList
+from history import history
 from dfQt import PandasModel
 
 # 定时器逻辑类，负责定时器的启动、停止、重置以及时间的更新和历史记录的管理
@@ -15,7 +15,7 @@ class TimerLogic:
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_time)
         self.ui = None
-        self.history = historyList()
+        self.history = history()
 
     # 设置用户界面对象
     def num2str(self,num):
@@ -41,7 +41,7 @@ class TimerLogic:
     def stop_timer(self):
         self.timer.stop()
         elapsed_time = time.time() - self.start_time
-        self.update_history(elapsed_time)
+        self.update(elapsed_time)
         self.ui.start_button.setText('开始')
         self.timer_running = False
 
@@ -59,6 +59,10 @@ class TimerLogic:
         if self.start_time is not None:
             elapsed_time = time.time() - self.start_time
             self.ui.time_label.setText(self.num2str(elapsed_time))
+    def update(self,time):
+        self.update_history(time)
+        self.update_best()
+        self.update_gragh()
     def update_best(self):
         strBest="best:"+self.num2str(self.history.best(0))+"\nao5:"+self.num2str(self.history.best(1))+"\nao12:"+self.num2str(self.history.best(2))
         self.ui.best_label.setText(strBest)
@@ -68,9 +72,13 @@ class TimerLogic:
         self.history.updateDf()
         self.model=PandasModel(self.history.df_h)
         self.ui.table.setModel(self.model)
-        self.update_best()
+
+    def update_gragh(self):
+        self.ui.graph_canvas.plot(self.history.df_h.time)
     
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
             self.logic.toggle_timer()
+
+    
 
