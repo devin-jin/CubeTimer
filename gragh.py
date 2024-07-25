@@ -7,10 +7,17 @@ class MplCanvas(FigureCanvas):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
+    
+    def clr(self):
+        self.axes.clear()
 
-    def plot(self, x):
-        y = [1,2,3,4,5,6,7,8,9,10]
-        z=[1,2,3,4,5,6,7,8,9,10]
-        self.axes.plot(y,z)
-        self.axes.plot(x)
+    def plot(self, x, label):
+        self.axes.plot(x,label=label)
+        self.axes.legend()
+        self.draw()
+
+    def label(self):
+        self.axes.set_title('history')
+        self.axes.set_xlabel('attempt')
+        self.axes.set_ylabel('time')
         

@@ -74,7 +74,12 @@ class TimerLogic:
         self.ui.table.setModel(self.model)
 
     def update_gragh(self):
-        self.ui.graph_canvas.plot(self.history.df_h.time)
+        self.ui.graph_canvas.clr()
+        self.ui.graph_canvas.label()
+        self.ui.graph_canvas.plot(self.history.df_h.time,'time')
+        self.ui.graph_canvas.plot(self.history.df_h.ao5,'ao5')
+        self.ui.graph_canvas.plot(self.history.df_h.ao12,'ao12')
+        
     
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Space:
